@@ -1,6 +1,6 @@
 # set-strictmode -version "2.0"
 
-$activate_script_template = @'
+$ACTIVATE_SCRIPT_TEMPLATE = @'
 # This file must be dot sourced from PoSh; you cannot run it
 # directly. Do this: . ./activate.ps1
 
@@ -53,27 +53,23 @@ function global:deactivate ( [switch] $NonDestructive ){
     Switch-DefaultPython
 
     if ( !$NonDestructive ) {
-        # Self destruct!
+        # SELF DESTRUCT!
         remove-item function:deactivate
     }
 }
 '@
 
-function add_posh_to_virtualenv
-{
-    param( [string] $TargetPath )
+function add_posh_to_virtualenv {
+    param([string] $TargetPath)
 
-    if ( test-path "$TargetPath/Scripts" )
-    {
+    if (test-path "$TargetPath/Scripts") {
         Set-Content "$TargetPath/Scripts/activate.ps1" `
-                    $activate_script_template `
+                    $ACTIVATE_SCRIPT_TEMPLATE `
                     -encoding "UTF8"
-        $venv_name = split-path $TargetPath -Leaf
-        "PoSh activate script added to $env:WORKON_HOME\$venv_name\Scripts."
+        write-host "Added activation script por Powershell to $TargetPath\Scripts."
     }
-    else
-    {
-        Write-Warning "Didn't copy PoSh activate script to new virtual environtment."
+    else {
+        Write-Warning "Couldn't copy PoSh activate script to new virtual environment."
     }
 }
 

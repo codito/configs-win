@@ -28,14 +28,7 @@ function VerifyWorkonHome
 # set up virtualenvwrapper properly
 function Initialize
 {
-    try
-    {
-        VerifyWorkonHome
-    }
-    catch [System.IO.IOException]
-    {
-        throw($_)
-    }
+    VerifyWorkonHome
 
     $pathToExtensions = join-path $script:thisDir 'Extensions'
     get-childitem $pathToExtensions -Filter 'Extension.*.ps1' | foreach-object { & $_.fullname }
@@ -46,20 +39,15 @@ function Initialize
 
 function global:VerifyVirtualEnv
 {
-    $venv = get-command $global:VIRTUALENVWRAPPER_VIRTUALENV -erroraction silentlycontinue
-    if (-not $venv)
-    {
-        throw(new-object `
-                -typename "System.IO.FileNotFoundException" `
-                -argumentlist "ERROR: virtualenvwrapper could not find virtualenv in your PATH."
-                )
+    if (!$VIRTUALENVWRAPPER_VIRTUALENV) {
+        throw "`$VIRTUALENVWRAPPER_VIRTUALENV is not defined."
     }
-    elseif (-not (test-path $venv.definition))
-    {
+
+    $venv = get-command $global:VIRTUALENVWRAPPER_VIRTUALENV -erroraction silentlycontinue
+    if (-not $venv) {
         throw(new-object `
                 -typename "System.IO.FileNotFoundException" `
-                -argumentlist "ERROR: Found virtualenv in path as `"$venv`" but that does not exist."
-                )        
+                -argumentlist "ERROR: virtualenvwrapper could not find virtualenv in your PATH.")
     }
 }
 

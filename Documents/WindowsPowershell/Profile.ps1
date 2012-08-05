@@ -15,12 +15,18 @@ $env:PLINK_PROTOCOL = "ssh"
 $env:GIT_INSTALL_ROOT = "$env:PortableEnv\git"
 $env:PATH += ";$env:GIT_INSTALL_ROOT\cmd"
 
-## prompt
+# Modules
+Import-Module posh-git
+Import-Module posh-hg
+Import-Module powertab
+
+## Prompt
 function prompt
 {
     $date = $(date)
     $dateString = $date.Hour.ToString()+":"+$date.Minute.ToString()+":"+$date.Second.ToString()
-    Write-Host $dateString" ["$(get-location)"]" -foregroundcolor green
+    Write-Host $dateString" ["$(get-location)"]" -foregroundcolor green -nonewline
+    Write-Host $(Write-VcsStatus)
     Write-Host $((get-history -count 1).Id+1)"$" -nonewline
     return " "
 }
@@ -41,13 +47,16 @@ set-alias wc measure-object
 ## Globals
 # Environment variables
 $env:Path = "$env:PortableEnv\Path;$env:PortableEnv\GnuWin32\bin;" + $env:Path
-$env:SCRIPTDIR = Resolve-Path("$env:PortableEnv\bin").ToString()
+$env:SCRIPTDIR = Resolve-Path("~\bin").ToString()
 $env:EDITOR = "gvim"
 
 # Script Directory
 $env:PATH += ";"+$env:SCRIPTDIR+";."
 
 ## User applications
+# Get my global helper functions
+. $(Join-Path $(Split-Path $MyInvocation.MyCommand.Path) "functions.ps1")
+
 # ACK
 function ack
 {

@@ -6,13 +6,13 @@ SHORT DESCRIPTION
 
 LONG DESCRIPTION
 	Shipped extensions:
-	
+
 		* Extension.UserScripts.ps1
-		* Extension.Projec.ps1	
+		* Extension.Project.ps1
 
 CONFIGURATION
 	Extensions are located in the Extensions directory of the VirtualEnvWrapper
-	for Windows (VWW) installation (by default: 
+	for Windows (VWW) installation (by default:
 	~/Documents/WindowsPowerShell/Modules/VirtualEnvWrapper/Extensions).
 
 HOW TO USE
@@ -23,8 +23,8 @@ HOW TO CREATE EXTENSIONS
 	name of the project being created.
 
 	Extension names must follow this pattern:
-		
+
 		Extension.*.ps1
-	    
+
 SEE ALSO
 	about_virtualenvwrapper_for_windows

@@ -5,7 +5,7 @@
 # Ensure cleanup at exit. (Based on PowerTab.)
 #------------------------------------------------------------------------------
 # XXX We should combine this with the TabExpansion cleanup part.
-$module = $MyInvocation.MyCommand.ScriptBlock.Module 
+$module = $MyInvocation.MyCommand.ScriptBlock.Module
 $module.OnRemove = {
     Unregister-Event -SourceIdentifier 'VirtualEnvWrapper.*'
     Remove-Job -Name 'VirtualenvWrapper.*' -Force
@@ -17,33 +17,36 @@ Switch-DefaultPython
 
 # make sure there is a default value for WORKON_HOME
 # you can override this setting in your PoSh profile.
-if (-not $env:WORKON_HOME)
-{
+if (-not $env:WORKON_HOME) {
     $env:WORKON_HOME = "$HOME/.virtualenvs"
 }
 
 # locate the global python where virtualenvwrapper is installed
-if (-not $VIRTUALENVWRAPPER_PYTHON)
-{
+if (-not $VIRTUALENVWRAPPER_PYTHON) {
     $global:VIRTUALENVWRAPPER_PYTHON = @(get-command python.exe)[0].definition
 }
 
 # TODO: Implement this.
-if (-not $VIRTUALENVWRAPPER_VIRTUALENV)
-{
+if (-not $VIRTUALENVWRAPPER_VIRTUALENV) {
     $global:VIRTUALENVWRAPPER_VIRTUALENV = 'virtualenv.exe'
 }
 
-# TODO: Implement this.
-if (-not $VIRTUALENVWRAPPER_HOOK_DIR)
-{
+if (-not $VIRTUALENVWRAPPER_VIRTUALENV_ARGS) {
+    $global:VIRTUALENVWRAPPER_VIRTUALENV_ARGS = ''
+}
+
+# We'll store global hooks here.
+if (-not (test-path variable:VIRTUALENVWRAPPER_HOOK_DIR)) {
+    $global:VIRTUALENVWRAPPER_HOOK_DIR = $env:WORKON_HOME
+}
+elseif (-not (test-path $VIRTUALENVWRAPPER_HOOK_DIR)) {
+    write-warning -message "Can't find path '$VIRTUALENVWRAPPER_HOOK_DIR' (`$VIRTUALENVWRAPPER_HOOK_DIR). Defaulting to `$env:WORKON_HOME."
     $global:VIRTUALENVWRAPPER_HOOK_DIR = $env:WORKON_HOME
 }
 
 # TODO: Implement this.
-if (-not $VIRTUALENVWRAPPER_LOG_DIR)
-{
-    $env:VIRTUALENVWRAPPER_LOG_DIR = $env:WORKON_HOME
+if (-not $VIRTUALENVWRAPPER_LOG_DIR) {
+    $global:VIRTUALENVWRAPPER_LOG_DIR = $env:WORKON_HOME
 }
 
 
@@ -55,74 +58,61 @@ if (-not $VIRTUALENVWRAPPER_LOG_DIR)
 function New-VirtualEnvironment
 {
     param($Name)
-    
+
     try {
         VerifyWorkonHome
         VerifyVirtualEnv
     }
     catch [System.IO.IOException] {
-        throw($_)
+        throw
     }
 
     [string] $envName = $Name
-
     push-location $env:WORKON_HOME
-        & "virtualenv.exe" $Name $args
+        & $global:VIRTUALENVWRAPPER_VIRTUALENV $Name $global:VIRTUALENVWRAPPER_VIRTUALENV_ARGS
     pop-location
 
     # If they passed a help option or got an error from virtualenv,
     # the environment won't exist.  Use that to tell whether
     # we should switch to the environment and run the hook.
-    if ($envName -and (test-path -lit "$ENV:WORKON_HOME/$envName"))
-    {
-        # On Windows, the bin dir doesn't have too much sense, but it might be
-        # required for plugins.
-        # new-item -item d "$ENV:WORKON_HOME/$EnvNameame/bin" > $null
+    if ($envName -and (test-path -lit "$ENV:WORKON_HOME/$envName")) {
         [void] (New-Event -SourceIdentifier 'VirtualenvWrapper.PreMakeVirtualEnv' -EventArguments $envName)
-        # RunHook "pre_mkvirtualenv" "$envName"
-        # This is specific to this version of virtualenvwrapper
         add_posh_to_virtualenv "$ENV:WORKON_HOME/$envName"
         workon $envName
         [void] (New-Event -SourceIdentifier 'VirtualenvWrapper.PostMakeVirtualEnv')
-        # RunHook "post_mkvirtualenv"
     }
 }
 
 
 function Remove-VirtualEnvironment
 {
-    if (!$args)
-    {
+    if (!$args) {
         throw("You must specify a virtual environment name.")
     }
 
     $env_name = $args[0]
 
     try {
-       VerifyWorkonHome 
+       VerifyWorkonHome
     }
     catch [System.IO.IOException] {
         throw($_)
     }
 
-    if (-not (test-path "$env:WORKON_HOME/$env_name"))
-    {
+    if (-not (test-path "$env:WORKON_HOME/$env_name")) {
         throw("The specified environment `"$env_name`" does not exist.")
     }
 
     $env_dir = resolve-path "$env:WORKON_HOME/$env_name" -erroraction silentlycontinue
 
-    if (-not "$env:VIRTUAL_ENV")
-    {
+    if (-not "$env:VIRTUAL_ENV") {
         $curr_env = ""
     }
-    else
-    {        
+    else {
         $curr_env = resolve-path "$env:VIRTUAL_ENV" -erroraction silentlycontinue
     }
 
-    if ($env_dir.path -eq $curr_env.path)
-    {
+    if ($env_dir.path -eq $curr_env.path) {
         throw(
             Concat "ERROR: You cannot remove the active environment ('$env_name')." `
                    "Either switch to another environment, or run 'deactivate'."
@@ -130,10 +120,8 @@ function Remove-VirtualEnvironment
     }
 
     [void] (New-Event -SourceIdentifier 'VirtualenvWrapper.PreRemoveVirtualEnv' -EventArguments $env_name)
-    # RunHook "pre_rmvirtualenv" "$env_name"
     remove-item $env_dir -rec
     [void] (New-Event -SourceIdentifier 'VirtualenvWrapper.PostRemoveVirtualEnv'-EventArguments $env_name)
-    # RunHook "post_rmvirtualenv" "$env_name"
 }
 
 
@@ -144,63 +132,41 @@ function Get-VirtualEnvironment
         VerifyWorkonHome
     }
     catch [System.IO.IOException] {
-        throw($_)
+        throw
     }
     # get-childitem "$env:workon_home/*/scripts/activate.ps1" | `
     #             foreach-object { split-path "$((split-path $_ -parent))/.." -leaf }
     GetVirtualEnvData
 }
 
-# List or change working virtual environments
-#
-# Usage: workon [environment_name]
-#
 function Set-VirtualEnvironment
+<# .DESCRIPTION
+    Activates a virtual environment.
+#>
 {
     $env_name = "$args"
+     if (-not([bool]$env_name)) {
+        throw("You must specify a virtual environment name.")
+    }
 
     try {
         VerifyWorkonHome
         VerifyWorkonEnvironment $env_name
     }
     catch [System.IO.IOException] {
-        throw($_)
+        throw
     }
 
-    switch ( $true ) {
-
-        ( [bool]!$env_name ) {
-
-            throw("You must specify a virtual environment name.")
-        }
-        default {
-
-            $activate = get-item "$env:WORKON_HOME/$env_name/scripts/activate.ps1" -errora silentlycontinue
-
-            if ($activate -and -not (test-path $activate))
-            {
-                write-warning "ERROR: Environment '$env:WORKON_HOME/$env_name' does not contain an activate script."
-                return
-            }
-
-            # Deactivate any current environment "destructively"
-            # before switching so we use our override function,
-            # if it exists.
-            # Fall back on .bat file??
-            if (get-command deactivate -type function -errora silentlycontinue)
-            {
-                # this won't happen unless ps scripts are available to activate/deactivate
-                deactivate
-            }
-
-            [void] (New-Event -SourceIdentifier 'VirtualenvWrapper.PreActivateVirtualEnv' -EventArguments $env_name)
-            # RunHook "pre_activate" "$env_name"
-
-            & $activate
-            [void] (New-Event -SourceIdentifier 'VirtualenvWrapper.PostActivateVirtualEnv')
-            # RunHook "post_activate"
-        }
+    $activate = get-item "$env:WORKON_HOME/$env_name/scripts/activate.ps1" -errora silentlycontinue
+    # Deactivate any current environment "destructively" before switching
+    # using our override function, if it exists.
+    if (get-command "deactivate" -type function -erroraction "silentlycontinue") {
+        deactivate
     }
+
+    [void] (New-Event -SourceIdentifier 'VirtualenvWrapper.PreActivateVirtualEnv' -EventArguments $env_name)
+    & $activate
+    [void] (New-Event -SourceIdentifier 'VirtualenvWrapper.PostActivateVirtualEnv')
 }
 
 
@@ -226,13 +192,13 @@ function virtualenvwrapper_get_site_packages_dir
 # virtualenv.
 function CDIntoSitePackages
 {
-    try { 
+    try {
         VerifyWorkonHome
         VerifyActiveEnvironment
     }
     catch [System.IO.IOException] {
         throw($_)
-    }    
+    }
     $site_packages = virtualenvwrapper_get_site_packages_dir
     set-location "$site_packages/$args"
 }
@@ -241,7 +207,7 @@ function CDIntoSitePackages
 # Does a ``cd`` to the root of the currently-active virtualenv.
 function CDIntoVirtualEnvironment
 {
-    try { 
+    try {
         VerifyWorkonHome
         VerifyActiveEnvironment
     }
@@ -256,7 +222,7 @@ function CDIntoVirtualEnvironment
 # virtualenv
 function GetSitePackages
 {
-    try { 
+    try {
         VerifyWorkonHome
         VerifyActiveEnvironment
     }
@@ -289,28 +255,45 @@ function Copy-VirtualEnvironment
 
 function workon
 {
-    if ("$args")
-    {
+    if ("$args") {
         Set-VirtualEnvironment "$args"
-    } 
-    else
-    {
+    }
+    else {
         Get-VirtualEnvironment
     }
 }
 
 
-# XXX: THIS IS WRONG, but I can't make it work otherwise.
-# Also, Import-Module -prefix PREFIX_ breaks aliases! What's the point, then?
+function mktmpenv {
+    throw(new-object "System.NotImplementedException")
+}
+
+
+function showvirtualenv {
+    throw(new-object "System.NotImplementedException")
+}
+
+
+function add2virtualenv {
+    throw(new-object "System.NotImplementedException")
+}
+
+
+function toggleglobasitepackages {
+    throw(new-object "System.NotImplementedException")
+}
+
+
+# Import-Module -prefix PREFIX_ breaks aliases.
 # =============================================================================
 # Public interface
 # =============================================================================
-new-alias -name "cdsitepackages"    -value "CDIntoSitePackages"     
+new-alias -name "cdsitepackages"    -value "CDIntoSitePackages"
 new-alias -name "cdvirtualenv"      -value "CDIntoVirtualEnvironment"
-new-alias -name "cpvirtualenv"      -value "Copy-VirtualEnvironment" 
-new-alias -name "lssitepackages"    -value "GetSitePackages"        
-# new-alias -name "lsvirtualenv"      -value "GetVirtualEnvironments" 
-new-alias -name "mkvirtualenv"      -value "New-VirtualEnvironment" 
+new-alias -name "cpvirtualenv"      -value "Copy-VirtualEnvironment"
+new-alias -name "lssitepackages"    -value "GetSitePackages"
+new-alias -name "lsvirtualenv"      -value "Get-VirtualEnvironment"
+new-alias -name "mkvirtualenv"      -value "New-VirtualEnvironment"
 new-alias -name "rmvirtualenv"      -value "Remove-VirtualEnvironment"
 # =============================================================================
 
@@ -318,12 +301,16 @@ export-modulemember -function "CDIntoSitePackages"
 export-modulemember -function "CDIntoVirtualEnvironment"
 export-modulemember -function "Copy-VirtualEnvironment"
 export-modulemember -function "GetSitePackages"
-# export-modulemember -function "GetVirtualEnvironments"
 export-modulemember -function "New-VirtualEnvironment"
 export-modulemember -function "Remove-VirtualEnvironment"
 export-modulemember -function "Set-VirtualEnvironment"
 export-modulemember -function "Get-VirtualEnvironment"
 export-modulemember -function "workon"
+export-modulemember -function "mktmpenv"
+export-modulemember -function "showvirtualenv"
+export-modulemember -function "add2virtualenv"
+export-modulemember -function "toggleglobasitepackages"
+
 
 # Conditionally export additional stuff so that we can test it.
 if ($args -and $args[0] -eq "TESTING")
@@ -336,7 +323,7 @@ export-modulemember -alias "cdsitepackages"
 export-modulemember -alias "cdvirtualenv"
 export-modulemember -alias "cpvirtualenv"
 export-modulemember -alias "lssitepackages"
-# export-modulemember -alias "lsvirtualenv"
+export-modulemember -alias "lsvirtualenv"
 export-modulemember -alias "mkvirtualenv"
 export-modulemember -alias "rmvirtualenv"
 

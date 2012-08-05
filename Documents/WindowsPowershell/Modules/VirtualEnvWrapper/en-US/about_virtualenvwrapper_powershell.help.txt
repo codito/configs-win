@@ -12,8 +12,8 @@ LONG DESCRIPTION
 
 	Most of the original features of virtualenvwrapper have been implemented
 	in VWW.
-	
-	VWW implements virtualenvwrapper in a way that fits PowerShell. Thus, 
+
+	VWW implements virtualenvwrapper in a way that fits PowerShell. Thus,
 	there is a New-VirtualEnvironment as well as a Remove-VirtualEnvironment
 	cmdlet. In order to make long-time users of virtualenvwrapper at home,
 	however, aliases and functions matching the original interface are provided
@@ -24,6 +24,8 @@ CONFIGURATION
 
 	$env:WORKON_HOME
 
+		Note this is an environment variable.
+
 		This variable contains the path to the directory where all virtual
 		environments will be stored. By default, it points to
 		$HOME/.virtualenvs.
@@ -32,6 +34,26 @@ CONFIGURATION
 
 		You may want to make $env:WORKON_HOME a PSDrive so you can access it
 		easily with Set-Location. This is not done automatically.
+
+	$global:VIRTUALENVWRAPPER_LOG_DIR
+
+		Directory where logs will be stored. (Not implemented.)
+
+	$global:VIRTUALENVWRAPPER_VIRTUALENV_ARGS
+
+		Arguments to pass to virtualenv.
+
+	$global:VIRTUALENVWRAPPER_VIRTUALENV
+
+		Points to the virtualenv application. By default, it's "virtualenv.exe".
+
+	$global:VIRTUALENVWRAPPER_HOOK_DIR
+
+		Hooks will be stored here. Defaults to $env:WORKON_HOME.
+
+	$global:VIRTUALENVWRAPPER_PYTHON
+
+		Python executable to be used. (Not implemented.)
 
 HOW TO USE
 
@@ -46,8 +68,12 @@ HOW TO USE
 
 	To see more available cmdlets, search them like this:
 
-	Get-Command -Noun VirtualEnvironment
-	    
+	Get-Module virtualenvwrapper | Select-Object -ExpandProperty ExportedFunctions
+	Get-Module virtualenvwrapper | Select-Object -ExpandProperty ExportedAliases
+
 SEE ALSO
 
 	about_extending_virtualenvwrapper_for_windows
+
+LINK
+	http://www.doughellmann.com/docs/virtualenvwrapper/

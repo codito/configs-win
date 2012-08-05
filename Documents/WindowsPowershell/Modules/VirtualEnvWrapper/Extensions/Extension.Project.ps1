@@ -11,7 +11,7 @@
 $script:thisDir = split-path $MyInvocation.MyCommand.Path -parent
 # XXX This one shouldn't be needed if this was a module. We need to know where
 # to find extensions (and templates).
-$global:VEWRoot = split-path $script:thisDir -parent
+$script:VEWRoot = split-path $script:thisDir -parent
 
 # Define actions for event listeners.
 ###############################################################################
@@ -55,18 +55,13 @@ $PostMakeVirtualEnvProjectHook = {
 #==============================================================================
 
 # XXX We shouldn't need to define this as global (and the others either).
-function global:VEW_Project_VerifyProjectHome { 
-    if (-not (test-path variable:ProjectHome))
-    {
-        throw(
-            "You must set the `$ProjectHome variable to point to a directory."
-        )
+function global:VEW_Project_VerifyProjectHome {
+    if (-not (test-path variable:ProjectHome)) {
+        throw("You must set the `$ProjectHome variable to point to a directory.")
     }
 
     if (-not (test-path $ProjectHome)) {
-        throw(
-            "Set `$ProjectHome to an existing directory."
-            ) 
+        throw("Set `$ProjectHome to an existing directory.")
     }
 }
 
@@ -87,8 +82,16 @@ function global:Set-VirtualEnvProject {
         $Venv = $env:VIRTUAL_ENV
     }
 
+    if (!(test-path $venv)) {
+        throw ("Can't find virtualenv.")
+    }
+
     if (-not $Project) {
-       $Project = $pwd.providerpath 
+       $Project = $pwd.providerpath
+    }
+
+    if (!(test-path $project)) {
+        throw("Can't find project directory.")
     }
 
     Write-Host "Setting project for $(split-path $Venv -leaf) to $Project"
@@ -103,20 +106,22 @@ function global:New-VirtualEnvProject {
     folder.
 
     .DESCRIPTION
-    You need to specify the name of the new virtual environment as well as the
-    name of the new project folder. The variable $ProjectHome must be set and
-    point to an existing directory. This is where project folders are created.
+    You need to specify the name of the new virtual environment. The variable
+    $ProjectHome must be set and point to an existing directory. This is where
+    project folders are created.
 #>
-    param($EnvName,[string[]]$Templates)
+    param([string]$EnvName=$(throw("Need a name for the virtual environment.")),
+          [string[]]$Templates=@())
+
     try {
         VEW_Project_VerifyProjectHome
     }
     catch {
-        throw 
+        throw
     }
 
-    if ((test-path "$global:ProjectHome/$EnvName")) {
-        throw("Project $EnvName already exists")        
+    if ((test-path "$ProjectHome/$EnvName")) {
+        throw("Project $EnvName already exists.")
     }
 
     try {
@@ -126,15 +131,8 @@ function global:New-VirtualEnvProject {
         throw
     }
 
-    if (-not $EnvName) {
-        throw("Need a Venv name.")
-    }
-
     [void] (New-Event -sourceidentifier "VirtualEnvWrapper.Project.PreMakeVirtualEnvProject" `
                 -eventarguments $envName)
-
-
-    Set-Location $ProjectHome
 
     write-host "Creating $ProjectHome/$EnvName"
     [void] (New-Item -ItemType 'directory' -Path "$ProjectHome/$EnvName")
@@ -142,13 +140,26 @@ function global:New-VirtualEnvProject {
 
     Set-Location "$ProjectHome/$EnvName"
 
+    if ($templates.count -gt 0 -and
+        (!(test-path variable:VirtualenvWrapperTemplates)) -or
+        ("$VirtualenvWrapperTemplates" -and !(test-path "$VirtualenvWrapperTemplates"))) {
+            throw ("Set the `$VirtualenvWrapperTemplates variable to point to an existing directory containing the templates.")
+    }
+
     foreach ($t in $templates) {
+        $item = get-item (join-path $VirtualenvWrapperTemplates "Project.Template.$t.ps1") -erroraction "SilentlyContinue"
+        if (!$item) {
+            write-error "Template '$t' not found. Not applying."
+            continue
+        }
+
+        # todo: implement ant test this
         write-host "Applying template $t..."
-        & "$global:VEWRoot/Extensions/Project.Template.$t.ps1" $envName
+        & $item $envName
     }
 
     [void] (new-event -sourceidentifier "VirtualEnvWrapper.Project.PostMakeVirtualEnvProject" `
-                -eventarguments $envName)
+                -eventarguments $function)
 }
 
 
@@ -172,19 +183,19 @@ function global:Set-LocationToProject {
         throw
     }
 
-    if (test-path "$env:VIRTUAL_ENV/.project") {
-        $projectDir = get-content "$env:VIRTUAL_ENV/.project"
-        if (test-path $projectDir) {
-                set-location $projectDir
-        }   
-       else {
-           throw("Project directory $projectDir does not exist.")
-       }
+    if (!(test-path "$env:VIRTUAL_ENV/.project")) {
+        throw("No project set in $env:VIRTUAL_ENV/.project")
     }
-    else {
-        throw("No project set in $VIRTUAL_ENV/.project")
+
+    $projectDir = get-content "$env:VIRTUAL_ENV/.project"
+    if (!(test-path $projectDir)) {
+       throw("Project directory $projectDir does not exist.")
     }
+
+    set-location $projectDir
 }
 
 
 new-alias -name 'cdproject' -value Set-LocationToProject -scope "Global"
+new-alias -name 'mkproject' -value New-VirtualEnvProject -scope "Global"
+new-alias -name 'setvirtualenvproject' -value Set-VirtualEnvProject -scope "Global"
