@@ -1,0 +1,25 @@
+.hg
+AppData/
+bin/
+Contacts/
+Desktop/
+Documents/*
+Downloads/
+Favorites/
+Links/
+Mercurial.ini
+Music/
+Pictures/
+Podcasts/
+Saved Games/
+Searches/
+Tracing/
+Videos/
+.virtualenvs/
+!Documents/WindowsPowershell
+
+# files
+_*vim*
+DevelopmentStorage*
+local.vim
+NTUSER*
