@@ -3,7 +3,7 @@
     email = pratikarun@gmail.com
 [core]
     autocrlf = false
-	excludesfile = ~/.gitignore_global
+    excludesfile = ~/.gitignore_global
 [alias]
     st = status
     ci = commit
@@ -11,3 +11,5 @@
     co = checkout
     df = diff
     lg = log -p
+[include]
+    path = .gitconfig_local
