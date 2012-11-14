@@ -2,7 +2,7 @@
     name = Arun Mahapatra
     email = pratikarun@gmail.com
 [core]
-    autocrlf = input
+    autocrlf = false
     excludesfile = ~/.gitignore_global
 [alias]
     st = status
