@@ -1,9 +1,9 @@
 # Functions for PS
-# Last Modified: 
+# Last Modified: 14/11/2012,  India Standard Time
 
 # Search utilities
 function global:rgrep { ls -recurse -include $args[1] | grep $args[0] }
-function global:rfind { ls $args[0] | % { $_.FullName } }
+function global:rfind { ls -recurse -include $args[0] | % { $_.FullName } }
 
 # File system utilities
 function global:mklink { cmd /c mklink $args }

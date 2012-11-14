@@ -1,6 +1,6 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 
+## Last Modified: 14/11/2012,  India Standard Time
 
 $env:PortableEnv = "g:\apps"
 $env:TERM = 'cygwin'
@@ -16,9 +16,9 @@ $env:GIT_INSTALL_ROOT = "$env:PortableEnv\git"
 $env:PATH += ";$env:GIT_INSTALL_ROOT\cmd"
 
 # Modules
+Import-Module powertab # must be imported first (hg/git depend on this!)
 Import-Module posh-git
 Import-Module posh-hg
-Import-Module powertab
 
 ## Prompt
 function prompt

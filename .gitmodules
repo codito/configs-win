@@ -1,5 +1,5 @@
-[submodule ".\\vimfiles"]
-	path = .\\vimfiles
+[submodule "vimfiles"]
+	path = vimfiles
 	url = https://github.com/codito/vim-config.git
 [submodule "Documents/WindowsPowershell/Modules/Posh-git"]
 	path = Documents/WindowsPowershell/Modules/Posh-git
