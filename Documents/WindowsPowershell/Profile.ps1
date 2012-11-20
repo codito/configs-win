@@ -1,6 +1,6 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 14/11/2012,  India Standard Time
+## Last Modified: 
 
 $env:PortableEnv = "g:\apps"
 $env:TERM = 'cygwin'
@@ -25,8 +25,9 @@ function prompt
 {
     $date = $(date)
     $dateString = $date.Hour.ToString()+":"+$date.Minute.ToString()+":"+$date.Second.ToString()
-    Write-Host $dateString" ["$(get-location)"]" -foregroundcolor green -nonewline
-    Write-Host $(Write-VcsStatus)
+    Write-Host $dateString" ["$(get-location)"]" -foregroundcolor green
+    #Write-Host $dateString" ["$(get-location)"]" -foregroundcolor green -nonewline
+    #Write-Host $(Write-VcsStatus)
     Write-Host $((get-history -count 1).Id+1)"$" -nonewline
     return " "
 }
