@@ -1,7 +1,2 @@
-# ACK Configuration File
-
-# Add powershell files
 --type-set=powershell=.ps1
-
-# Ignore additional binary folders
 --ignore-dir=binaries
