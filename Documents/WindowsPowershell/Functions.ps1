@@ -1,9 +1,19 @@
 # Functions for PS
-# Last Modified: 14/11/2012,  India Standard Time
+# Last Modified: 
 
 # Search utilities
 function global:rgrep { ls -recurse -include $args[1] | grep $args[0] }
 function global:rfind { ls -recurse -include $args[0] | % { $_.FullName } }
+
+# System utilities
+function global:disable-capslock
+{
+    & reg add "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout" /v "Scancode Map" /t REG_BINARY /d "00,00,00,00,00,00,00,00,02,00,00,00,00,00,3a,00,00,00,00,00" /f
+}
+function global:enable-capslock
+{
+    & reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout" /v "Scancode Map" /f
+}
 
 # File system utilities
 function global:mklink { cmd /c mklink $args }
@@ -28,6 +38,17 @@ function global:fdiff($file1, $file2)
 
     write-host "Comparing $file1 : $file2"
     diff $left $right
+}
+
+# Resharper
+function global:resume-resharper()
+{
+    & reg add HKCU\Software\JetBrains\ReSharper\v7.1\vs11.0 /v IsSuspended /t REG_SZ /d False /f
+}
+
+function global:suspend-resharper()
+{
+    & reg add HKCU\Software\JetBrains\ReSharper\v7.1\vs11.0 /v IsSuspended /t REG_SZ /d True /f
 }
 
 # Diffs multiple files in a directory selected by a pattern
