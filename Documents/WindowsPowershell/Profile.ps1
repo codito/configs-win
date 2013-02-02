@@ -11,9 +11,9 @@ $env:PATH = "C:\Python27\Scripts;" + $env:PATH
 $env:WORKON_HOME = "~\.virtualenvs"
 
 # GIT
-$env:PLINK_PROTOCOL = "ssh"
-$env:GIT_INSTALL_ROOT = "$env:PortableEnv\git"
-$env:PATH += ";$env:GIT_INSTALL_ROOT\cmd"
+#$env:PLINK_PROTOCOL = "ssh"
+#$env:GIT_INSTALL_ROOT = "$env:PortableEnv\git"
+#$env:PATH += ";$env:GIT_INSTALL_ROOT\cmd"
 
 # Modules
 Import-Module powertab # must be imported first (hg/git depend on this!)
@@ -34,7 +34,6 @@ function prompt
 
 ## Aliases
 #set-alias la ls -recurse
-rm -force alias:where
 rm -force alias:cd
 
 set-alias cal gadget-calendar
@@ -42,7 +41,7 @@ set-alias cd pushd;set-location
 set-alias cd- popd
 set-alias grep select-string
 set-alias l get-childitem
-set-alias whereis where
+set-alias whereis where.exe
 set-alias wc measure-object
 
 ## Globals
@@ -61,5 +60,5 @@ $env:PATH += ";"+$env:SCRIPTDIR+";."
 # ACK
 function ack
 {
-    & $env:PortableApps\git\bin\perl.exe "$env:PortableEnv\bin\standalone-ack" $args
+    & $env:PortableEnv\git\bin\perl.exe $((resolve-path "~\bin\standalone-ack").path) $args
 }
