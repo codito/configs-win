@@ -1,6 +1,5 @@
 [user]
     name = Arun Mahapatra
-    email = pratikarun@gmail.com
 [core]
     autocrlf = false
     excludesfile = ~/.gitignore_global
