@@ -17,9 +17,16 @@ if (test-path function:deactivate) {
 $VIRTUAL_ENV = $BASE_DIR
 $env:VIRTUAL_ENV = $VIRTUAL_ENV
 
+# TODO: Handle both environment variables and variables in global scope
 $global:_OLD_VIRTUAL_PATH = $env:PATH
 $env:PATH = "$env:VIRTUAL_ENV/Scripts;" + $env:PATH
+if (test-path env:PYTHONHOME) {
+    $global:_OLD_PYTHONHOME = $env:PYTHONHOME
+    remove-item env:PYTHONHOME
+}
+
 Switch-DefaultPython
+
 function global:_old_virtual_prompt { "" }
 $function:_old_virtual_prompt = $function:prompt
 function global:prompt {
@@ -28,7 +35,7 @@ function global:prompt {
     & $function:_old_virtual_prompt
 }
 
-function global:deactivate ( [switch] $NonDestructive ){
+function global:deactivate ( [switch] $NonDestructive ) {
 
     $venv = split-path $env:VIRTUAL_ENV -leaf
     [void] (New-Event -SourceIdentifier 'VirtualEnvWrapper.PreDeactivateVirtualEnv' -eventarguments $venv)
@@ -36,6 +43,11 @@ function global:deactivate ( [switch] $NonDestructive ){
     if ( test-path variable:_OLD_VIRTUAL_PATH ) {
         $env:PATH = $variable:_OLD_VIRTUAL_PATH
         remove-variable "_OLD_VIRTUAL_PATH" -scope global
+    }
+
+    if ( test-path env:PYTHONHOME ) {
+        $env:PYTHONHOME = $env:_OLD_PYTHONHOME
+        remove-item env:_OLD_PYTHONHOME
     }
 
     if ( test-path function:_old_virtual_prompt ) {
@@ -106,10 +118,30 @@ function switchPythonFTypeOpenCmd
 
 function switchPythonCore
 {
-
     $currPython = getCurrentPythonExe
     $currPythonW = getCurrentPythonWExe
     $pyVer = & { $OFS = ""; "$((& "python.exe" "-V" 2>&1).exception.message.split(" ")[1][0..2])" }
+    $pyArch = $(& "python.exe" -c 'import platform; print platform.architecture()[0]')
+    $pyRegRoot = "HKCU\Software\Python\PythonCore"
+    $regView = $null
+
+    # Python installed for current user stays in HKCU irrespective of architecture
+    $null = & "reg.exe" "query" "$pyRegRoot\$pyVer\InstallPath" 2> $null
+    if ($lastExitCode -ne 0)
+    {
+        if ($pyArch -eq "32bit")
+        {
+            $regView = "/reg:32"
+        }
+
+        # System wide python install goes into architecture specific registry in HKLM
+        $pyRegRoot = "HKLM\Software\Python\PythonCore"
+        $null = & "reg.exe" "query" "$pyRegRoot\$pyVer\InstallPath" "$regView" 2> $null
+        if ($lastExitCode -ne 0)
+        {
+            throw "Unable to locate python install path from registry. Is python installed?"
+        }
+    }
 
     if ($currPython -like "*Scripts*")
     {
@@ -117,15 +149,11 @@ function switchPythonCore
     }
     else
     {
-       $pyBase = resolve-path (split-path $currPython -parent)
+        $pyBase = resolve-path (split-path $currPython -parent)
     }
-    if (-not(test-path "HKCU:/Software/Python/PythonCore"))
-    {
-        new-item "HKCU:/Software/Python/PythonCore/$pyVer/InstallPath" -Force > $null
-        new-item "HKCU:/Software/Python/PythonCore/$pyVer/PythonPath" > $null
-    }
-    set-itemproperty -path "HKCU:/Software/Python/PythonCore/$pyVer/InstallPath" -name "(default)" -value $pyBase
-    set-itemproperty -path "HKCU:/Software/Python/PythonCore/$pyVer/PythonPath" -name "(default)" -value "$pyBase\Lib;$pyBase\DLLs;$pyBase\Lib\lib-tk"
+
+    $null = & 'reg.exe' 'add' "$pyRegRoot\$pyVer\InstallPath" '/ve' '/d' "$pyBase" '/t' 'REG_SZ' "$regView" '/f'
+    $null = & 'reg.exe' 'add' "$pyRegRoot\$pyVer\PythonPath" '/ve' '/d' "$pyBase\Lib;$pyBase\DLLs;$pyBase\Lib\lib-tk" '/t' 'REG_SZ' "$regView" '/f'
 }
 
 function Switch-DefaultPython

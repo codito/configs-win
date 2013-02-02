@@ -9,7 +9,7 @@ function global:VEW_RunInSubProcess {
                                 -arg '-Nologo', `
                                      '-NoProfile', `
                                      # Between quotes so that paths with spaces work.
-                                     '-File', "`"$Script`""
+                                     '-File', "`"$(Resolve-Path $Script)`""
 }
 
 
