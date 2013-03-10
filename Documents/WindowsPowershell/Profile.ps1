@@ -48,7 +48,7 @@ set-alias wc measure-object
 # Environment variables
 $env:Path = "$env:PortableEnv\Path;$env:PortableEnv\GnuWin32\bin;" + $env:Path
 $env:SCRIPTDIR = Resolve-Path("~\bin").ToString()
-$env:EDITOR = "gvim"
+$env:EDITOR = "gvim.bat"
 
 # Script Directory
 $env:PATH += ";"+$env:SCRIPTDIR+";."
