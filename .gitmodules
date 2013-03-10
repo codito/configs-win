@@ -3,7 +3,7 @@
 	url = https://github.com/codito/vim-config.git
 [submodule "Documents/WindowsPowershell/Modules/Posh-git"]
 	path = Documents/WindowsPowershell/Modules/Posh-git
-	url = https://github.com/dahlbyk/posh-git.git
+	url = https://github.com/codito/posh-git.git
 [submodule "Documents/WindowsPowershell/Modules/Posh-hg"]
 	path = Documents/WindowsPowershell/Modules/Posh-hg
 	url = https://github.com/JeremySkinner/posh-hg.git
