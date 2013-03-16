@@ -33,6 +33,7 @@ function prompt
 }
 
 ## Aliases
+Enable-GitShortcuts
 #set-alias la ls -recurse
 rm -force alias:cd
 
