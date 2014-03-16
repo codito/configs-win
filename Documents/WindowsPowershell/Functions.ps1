@@ -51,6 +51,37 @@ function global:suspend-resharper()
     & reg add HKCU\Software\JetBrains\ReSharper\v7.1\vs11.0 /v IsSuspended /t REG_SZ /d True /f
 }
 
+# Virtual environment for Python
+function global:mkv
+{
+    param
+    (
+        [Parameter(Mandatory=$true)]
+        [String] $Path,
+        
+        [Switch] $SystemSitePackages
+    )
+
+    $venvArgs = @("$env:USERPROFILE\bin\pyvenvex.py", "--symlinks", "--verbose")
+    if ($SystemSitePackages) { $venvArgs += "--system-site-packages" }
+    $venvArgs += $path
+    & python $venvArgs
+    Write-Host "Completed command: $venvArgs"
+}
+
+function global:cdv
+{
+    param
+    (
+        [Parameter(Mandatory=$true)]
+        [String] $Path
+    )
+
+    if (-not (Test-Path $Path)) { Write-Host "Virtual environment path not found: $Path."; return }
+    & $Path\Scripts\Activate.ps1
+    Write-Host "Activated virtual environment from $path."
+}
+
 # Diffs multiple files in a directory selected by a pattern
 # Incomplete
 function global:mdiff($dir, $pattern)
