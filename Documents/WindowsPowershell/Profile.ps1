@@ -61,5 +61,6 @@ $env:PATH += ";"+$env:SCRIPTDIR+";."
 # ACK
 function ack
 {
-    & $env:PortableEnv\git\bin\perl.exe $((resolve-path "~\bin\standalone-ack").path) $args
+    $perlPath = $((Get-ChildItem $(where.exe git.exe)).Directory).FullName + "\..\bin\perl.exe"
+    & $perlPath $((resolve-path "~\bin\standalone-ack").path) $args
 }
