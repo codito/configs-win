@@ -16,7 +16,12 @@ $env:WORKON_HOME = "~\.virtualenvs"
 #$env:PATH += ";$env:GIT_INSTALL_ROOT\cmd"
 
 # Modules
-Import-Module powertab # must be imported first (hg/git depend on this!)
+Import-Module TabExpansion++
+if ($host.Name -eq 'ConsoleHost')
+{
+    Import-Module PSReadline
+}
+#Import-Module powertab # must be imported first (hg/git depend on this!)
 Import-Module posh-git
 Import-Module posh-hg
 
@@ -25,12 +30,15 @@ function prompt
 {
     $date = $(date)
     $dateString = $date.Hour.ToString()+":"+$date.Minute.ToString()+":"+$date.Second.ToString()
-    Write-Host $dateString" ["$(get-location)"]" -foregroundcolor green
-    #Write-Host $dateString" ["$(get-location)"]" -foregroundcolor green -nonewline
-    #Write-Host $(Write-VcsStatus)
+    #Write-Host $dateString" ["$(get-location)"]" -foregroundcolor green
+    Write-Host $dateString" ["$(get-location)"]" -foregroundcolor green -nonewline
+    Write-Host $(Write-VcsStatus)
     Write-Host $((get-history -count 1).Id+1)"$" -nonewline
     return " "
 }
+
+## Git prompt client
+$global:GitPromptSettings.UseGitPrompt = $true
 
 ## Aliases
 Enable-GitShortcuts
