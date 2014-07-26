@@ -37,8 +37,10 @@ function prompt
     return " "
 }
 
-## Git prompt client
 $global:GitPromptSettings.UseGitPrompt = $true
+
+## Readline
+Set-PSReadlineOption -EditMode Emacs
 
 ## Aliases
 Enable-GitShortcuts
