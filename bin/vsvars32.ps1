@@ -4,13 +4,14 @@
 function Get-Batchfile ($file)
 {
     $cmd = "`"$file`" & set"
+    Write-Host $cmd
     cmd /c $cmd | Foreach-Object {
         $p, $v = $_.split('=')
         Set-Item -path env:$p -value $v
     }
 }
 
-function VsVars32($version = "8.0")
+function VsVars32($version)
 {
     $key = "HKLM:SOFTWARE\Wow6432Node\Microsoft\VisualStudio\" + $version
     $VsKey = get-ItemProperty $key
@@ -22,5 +23,5 @@ function VsVars32($version = "8.0")
     [System.Console]::Title = "Visual Studio " + $version + " Windows Powershell"
 }
 
-VsVars32("11.0")
+VsVars32("14.0")
 # vim: set ft=powershell:
