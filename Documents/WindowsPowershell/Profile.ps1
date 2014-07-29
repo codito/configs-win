@@ -37,6 +37,7 @@ function prompt
     return " "
 }
 
+$global:GitPromptSettings.EnableWindowTitle = $false
 $global:GitPromptSettings.UseGitPrompt = $true
 
 ## Readline
