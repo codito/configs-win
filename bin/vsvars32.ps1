@@ -4,10 +4,11 @@
 function Get-Batchfile ($file)
 {
     $cmd = "`"$file`" & set"
-    Write-Host $cmd
     cmd /c $cmd | Foreach-Object {
-        $p, $v = $_.split('=')
-        Set-Item -path env:$p -value $v
+        if ($_.Contains('=')) {
+            $p, $v = $_.split('=')
+            Set-Item -path env:$p -value $v
+        }
     }
 }
 
