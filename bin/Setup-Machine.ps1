@@ -1,16 +1,16 @@
-choco install vim
-choco install clover
-choco install conemu
-choco install sysinternals
-choco install 7zip
-choco install foobar2000
-choco install f.lux
-choco install git
-choco install gittfs
-choco install google-chrome-x64
+choco install -y vim
+choco install -y clover
+choco install -y conemu
+choco install -y sysinternals
+choco install -y 7zip
+choco install -y foobar2000
+choco install -y f.lux
+choco install -y git
+choco install -y gittfs
+choco install -y google-chrome-x64
 
-choco install python-x86_32
+choco install -y python-x86_32
 
-choco install stylecop
-choco install ilspy
-choco install resharper
+choco install -y stylecop
+choco install -y ilspy
+choco install -y resharper
