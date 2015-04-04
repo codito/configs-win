@@ -1,6 +1,13 @@
 Windows configuration files
 ===========
 
+## Bare metal box
+On a powershell command prompt:
+```
+$ iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
+$ iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/codito/configs-win/master/bin/Setup-Machine.ps1'))
+```
+
 ## Installation
 On a powershell command prompt:
 ```
