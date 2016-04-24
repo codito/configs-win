@@ -1,6 +1,7 @@
 # Install scoop packages
 #
 iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
+scoop bucket add extras
 
 scoop install gvim
 scoop install conemu
