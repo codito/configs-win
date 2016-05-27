@@ -22,6 +22,7 @@ if ($host.Name -eq 'ConsoleHost')
     Import-Module PSReadline
 }
 #Import-Module powertab # must be imported first (hg/git depend on this!)
+Import-Module "git-status-cache-posh-client\GitStatusCachePoshClient.psm1"
 Import-Module posh-git
 Import-Module posh-hg
 
@@ -38,7 +39,6 @@ function prompt
 }
 
 $global:GitPromptSettings.EnableWindowTitle = $false
-$global:GitPromptSettings.UseGitPrompt = $true
 
 ## Readline
 Set-PSReadlineOption -EditMode Emacs
