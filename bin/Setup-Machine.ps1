@@ -34,7 +34,7 @@ choco install -y resharper
 choco install -y insomnia
 Write-Host "Setup: Installing choco packages: Complete."
 
-# Setup vim
+# Fetch windows configuration
 #
 cd ~
 git init
@@ -43,6 +43,13 @@ git fetch origin
 git checkout -t origin/master
 git submodule update --init
 
+# Setup vim
+#
 cmd /c mklink %userprofile%\_vimrc %userprofile%\vimfiles\vimrc
 cmd /c mklink %userprofile%\_gvimrc %userprofile%\vimfiles\gvimrc
 mkdir d:\backups
+
+# Setup git status cache
+#
+. ~\Documents\WindowsPowershell\Profile.ps1
+Update-GitStatusCache
