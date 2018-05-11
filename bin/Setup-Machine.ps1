@@ -3,7 +3,7 @@
 scoop install git
 scoop bucket add extras
 
-scoop install gvim
+scoop install vim
 #scoop install conemu
 scoop install sysinternals
 scoop install 7zip
