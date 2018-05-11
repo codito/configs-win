@@ -1,6 +1,6 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 11/05/2018, 14:59:32 India Standard Time
+## Last Modified: 11/05/2018, 16:27:40 India Standard Time
 
 $env:PortableEnv = "f:\apps"
 $env:TERM = 'cygwin'
@@ -23,7 +23,6 @@ if ($host.Name -eq 'ConsoleHost')
 #Import-Module powertab # must be imported first (hg/git depend on this!)
 Import-Module "git-status-cache-posh-client\GitStatusCachePoshClient.psm1"
 Import-Module posh-git
-Import-Module posh-hg
 
 ## Prompt
 function prompt
