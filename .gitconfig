@@ -12,3 +12,5 @@
     lg = log -p
 [include]
     path = .gitconfig_local
+[credential]
+    helper = manager

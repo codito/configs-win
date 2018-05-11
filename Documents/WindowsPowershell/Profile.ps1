@@ -1,13 +1,12 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 
+## Last Modified: 11/05/2018, 14:59:32 India Standard Time
 
-$env:PortableEnv = "g:\apps"
+$env:PortableEnv = "f:\apps"
 $env:TERM = 'cygwin'
 $env:LESS = 'FRSX'
 
 # Languages
-$env:PATH = "C:\Python27\Scripts;" + $env:PATH
 $env:WORKON_HOME = "~\.virtualenvs"
 
 # GIT
@@ -60,7 +59,7 @@ set-alias wc measure-object
 # Environment variables
 $env:Path = "$env:PortableEnv\Path;$env:PortableEnv\GnuWin32\bin;" + $env:Path
 $env:SCRIPTDIR = Resolve-Path("~\bin").ToString()
-$env:EDITOR = "gvim.bat"
+$env:EDITOR = "gvim.exe"
 
 # Script Directory
 $env:PATH += ";"+$env:SCRIPTDIR+";."
