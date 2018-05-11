@@ -1,13 +1,13 @@
 # Install scoop packages
 #
+scoop install git
 scoop bucket add extras
 
 scoop install gvim
 #scoop install conemu
 scoop install sysinternals
 scoop install 7zip
-scoop install git
-scoop install python -a 32bit
+scoop install python
 
 # Install chocolatey packages
 #
