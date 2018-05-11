@@ -21,9 +21,22 @@ Videos/
 .virtualenvs/
 !Documents/WindowsPowershell
 
+# others
+Application Data/
+Cookies/
+Local Settings/
+My Documents/
+NetHood/
+PrintHood/
+Recent/
+SendTo/
+Start Menu/
+Templates/
+
 # files
 _*vim*
 DevelopmentStorage*
 local.vim
 NTUSER*
 .scoop
+.gitconfig_local
