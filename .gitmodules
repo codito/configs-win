@@ -4,9 +4,6 @@
 [submodule "Documents/WindowsPowershell/Modules/Posh-git"]
 	path = Documents/WindowsPowershell/Modules/Posh-git
 	url = https://github.com/codito/posh-git.git
-[submodule "Documents/WindowsPowershell/Modules/Posh-hg"]
-	path = Documents/WindowsPowershell/Modules/Posh-hg
-	url = https://github.com/JeremySkinner/posh-hg.git
 [submodule "Documents/WindowsPowershell/Modules/git-status-cache-posh-client"]
 	path = Documents/WindowsPowershell/Modules/git-status-cache-posh-client
 	url = https://github.com/cmarcusreid/git-status-cache-posh-client.git
