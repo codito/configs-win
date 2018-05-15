@@ -3,11 +3,12 @@
 scoop install git
 scoop bucket add extras
 
-scoop install vim
-#scoop install conemu
-scoop install sysinternals
 scoop install 7zip
+scoop install ag
+scoop install mupdf
 scoop install python
+scoop install sysinternals
+scoop install vim
 
 # Install chocolatey packages
 #
