@@ -1,5 +1,5 @@
 # Functions for PS
-# Last Modified: 
+# Last Modified: 10/06/2021, 23:48:07 India Standard Time
 
 # Search utilities
 function global:rgrep { ls -recurse -include $args[1] | grep $args[0] }
@@ -16,6 +16,16 @@ function global:enable-capslock
 }
 
 # File system utilities
+function global:j {
+    $dir = $(autojump $args)
+    if ($dir -eq ".") {
+        $dir = $args[0]
+    }
+
+    pushd $dir
+    autojump --add $(pwd).Path
+}
+
 function global:mklink { cmd /c mklink $args }
 function global:ddiff($dir1, $dir2, $filePattern)
 {
@@ -58,7 +68,7 @@ function global:mkv
     (
         [Parameter(Mandatory=$true)]
         [String] $Path,
-        
+
         [Switch] $SystemSitePackages
     )
 

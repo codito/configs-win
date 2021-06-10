@@ -1,6 +1,6 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 10/06/2021, 22:40:43 India Standard Time
+## Last Modified: 10/06/2021, 23:46:41 India Standard Time
 
 $env:PortableEnv = "f:\apps"
 $env:TERM = 'cygwin'
@@ -47,10 +47,10 @@ Set-PSReadlineOption -EditMode Emacs
 Enable-GitShortcuts
 #set-alias la ls -recurse
 rm -force alias:cd
+set-alias cd j
+set-alias cd- popd
 
 set-alias cal gadget-calendar
-set-alias cd pushd;set-location
-set-alias cd- popd
 set-alias grep select-string
 set-alias l get-childitem
 set-alias whereis where.exe

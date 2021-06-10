@@ -8,6 +8,7 @@ scoop bucket add nerd-fonts https://github.com/matthewjberger/scoop-nerd-fonts
 scoop install sudo
 scoop install 7zip
 scoop install ag
+scoop install autojump-rs
 scoop install conemu
 sudo scoop install jetbrains-mono jetbrainsmono-nf
 scoop install python
