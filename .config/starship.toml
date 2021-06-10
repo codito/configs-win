@@ -1,0 +1,12 @@
+# See https://starship.rs/config
+[directory]
+truncation_length = 8
+
+[git_branch]
+symbol = ""
+
+[git_status]
+ahead = "↑"
+behind = "↓"
+deleted = "✗"
+diverged = "↕"
