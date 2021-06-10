@@ -30,8 +30,9 @@ git submodule update
 #
 cmd /c mklink %userprofile%\_vimrc %userprofile%\vimfiles\vimrc
 cmd /c mklink %userprofile%\_gvimrc %userprofile%\vimfiles\gvimrc
-mkdir d:\backups
+mkdir ~/vimfiles/sessions
+mkdir ~/vimfiles/tmp
 
 # Setup git status cache
 #
-. ~\Documents\WindowsPowershell\Profile.ps1
+. $Profile.CurrentUserAllHosts
