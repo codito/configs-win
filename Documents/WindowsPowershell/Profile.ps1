@@ -1,6 +1,6 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 11/05/2018, 16:27:40 India Standard Time
+## Last Modified: 10/06/2021, 22:40:43 India Standard Time
 
 $env:PortableEnv = "f:\apps"
 $env:TERM = 'cygwin'
@@ -15,26 +15,28 @@ $env:WORKON_HOME = "~\.virtualenvs"
 #$env:PATH += ";$env:GIT_INSTALL_ROOT\cmd"
 
 # Modules
-Import-Module TabExpansion++
 if ($host.Name -eq 'ConsoleHost')
 {
     Import-Module PSReadline
 }
 #Import-Module powertab # must be imported first (hg/git depend on this!)
-Import-Module "git-status-cache-posh-client\GitStatusCachePoshClient.psm1"
 Import-Module posh-git
 
 ## Prompt
-function prompt
-{
-    $date = $(date)
-    $dateString = $date.Hour.ToString()+":"+$date.Minute.ToString()+":"+$date.Second.ToString()
-    #Write-Host $dateString" ["$(get-location)"]" -foregroundcolor green
-    Write-Host $dateString" ["$(get-location)"]" -foregroundcolor green -nonewline
-    Write-Host $(Write-VcsStatus)
-    Write-Host $((get-history -count 1).Id+1)"$" -nonewline
-    return " "
+if ($(where.exe starship) -ne $null) {
+    Invoke-Expression (&starship init powershell)
 }
+
+#function prompt
+#{
+    #$date = $(date)
+    #$dateString = $date.Hour.ToString()+":"+$date.Minute.ToString()+":"+$date.Second.ToString()
+    ##Write-Host $dateString" ["$(get-location)"]" -foregroundcolor green
+    #Write-Host $dateString" ["$(get-location)"]" -foregroundcolor green -nonewline
+    #Write-Host $(Write-VcsStatus)
+    #Write-Host $((get-history -count 1).Id+1)"$" -nonewline
+    #return " "
+#}
 
 $global:GitPromptSettings.EnableWindowTitle = $false
 
@@ -62,14 +64,13 @@ $env:EDITOR = "gvim.exe"
 
 # Script Directory
 $env:PATH += ";"+$env:SCRIPTDIR+";."
+$env:PYTHONHOME = Resolve-Path("~\scoop\apps\python\current")
 
 ## User applications
 # Get my global helper functions
-. $(Join-Path $(Split-Path $MyInvocation.MyCommand.Path) "functions.ps1")
+function global:loadp { . $Profile.CurrentUserAllHosts }
+function global:editp { & $env:EDITOR $Profile.CurrentUserAllHosts }
+function global:loada { . $($(Join-Path $(Split-Path $Profile.CurrentUserAllHosts) "functions.ps1")) }
+function global:edita { & $env:EDITOR $(Join-Path $(Split-Path $Profile.CurrentUserAllHosts) "functions.ps1") }
 
-# ACK
-function ack
-{
-    $perlPath = $((Get-ChildItem $(where.exe git.exe)).Directory).FullName + "\..\bin\perl.exe"
-    & $perlPath $((resolve-path "~\bin\standalone-ack").path) $args
-}
+loada
