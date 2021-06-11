@@ -1,5 +1,5 @@
 # Functions for PS
-# Last Modified: 10/06/2021, 23:48:07 India Standard Time
+# Last Modified: 11/06/2021, 09:26:01 India Standard Time
 
 # Search utilities
 function global:rgrep { ls -recurse -include $args[1] | grep $args[0] }
@@ -17,9 +17,12 @@ function global:enable-capslock
 
 # File system utilities
 function global:j {
-    $dir = $(autojump $args)
-    if ($dir -eq ".") {
-        $dir = $args[0]
+    $dir = $args[0]
+    if (!(Test-Path $args[0])) {
+        $d = $(autojump $args)
+        if ($d -ne ".") {
+            $dir = $d
+        }
     }
 
     pushd $dir
