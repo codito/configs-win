@@ -1,8 +1,7 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 10/06/2021, 23:46:41 India Standard Time
+## Last Modified: 04/07/2021, 19:15:07 India Standard Time
 
-$env:PortableEnv = "f:\apps"
 $env:TERM = 'cygwin'
 $env:LESS = 'FRSX'
 
@@ -11,7 +10,6 @@ $env:WORKON_HOME = "~\.virtualenvs"
 
 # GIT
 #$env:PLINK_PROTOCOL = "ssh"
-#$env:GIT_INSTALL_ROOT = "$env:PortableEnv\git"
 #$env:PATH += ";$env:GIT_INSTALL_ROOT\cmd"
 
 # Modules
@@ -58,7 +56,6 @@ set-alias wc measure-object
 
 ## Globals
 # Environment variables
-$env:Path = "$env:PortableEnv\Path;$env:PortableEnv\GnuWin32\bin;" + $env:Path
 $env:SCRIPTDIR = Resolve-Path("~\bin").ToString()
 $env:EDITOR = "gvim.exe"
 
