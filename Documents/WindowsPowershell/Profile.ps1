@@ -1,6 +1,6 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 04/07/2021, 19:15:07 India Standard Time
+## Last Modified: 23/07/2021, 08:47:43 India Standard Time
 
 $env:TERM = 'cygwin'
 $env:LESS = 'FRSX'
@@ -18,7 +18,7 @@ if ($host.Name -eq 'ConsoleHost')
     Import-Module PSReadline
 }
 #Import-Module powertab # must be imported first (hg/git depend on this!)
-Import-Module posh-git
+#Import-Module posh-git
 
 ## Prompt
 if ($(where.exe starship) -ne $null) {
@@ -36,13 +36,13 @@ if ($(where.exe starship) -ne $null) {
     #return " "
 #}
 
-$global:GitPromptSettings.EnableWindowTitle = $false
+#$global:GitPromptSettings.EnableWindowTitle = $false
 
 ## Readline
 Set-PSReadlineOption -EditMode Emacs
 
 ## Aliases
-Enable-GitShortcuts
+#Enable-GitShortcuts
 #set-alias la ls -recurse
 rm -force alias:cd
 set-alias cd j
