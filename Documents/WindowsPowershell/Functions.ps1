@@ -1,5 +1,5 @@
 # Functions for PS
-# Last Modified: 04/07/2021, 19:13:07 India Standard Time
+# Last Modified: 23/07/2021, 22:54:33 +0530
 
 # Search utilities
 function global:rgrep { ls -recurse -include $args[1] | grep $args[0] }
@@ -57,6 +57,17 @@ function global:fdiff($file1, $file2)
     write-host "Comparing $file1 : $file2"
     diff $left $right
 }
+
+# Git aliases, inspired from oh-my-zsh git plugin
+function global:ga { git add $args }
+function global:gb { git branch $args }
+function global:gci { git commit $args }
+function global:gco { git checkout $args }
+function global:gcm { git checkout master }
+function global:gd { git diff $args }
+function global:glg { git log --stat --max-count=5 $args }
+function global:glgg { git log --graph --max-count=5 $args }
+function global:gst { git status $args }
 
 # Resharper
 function global:resume-resharper()
