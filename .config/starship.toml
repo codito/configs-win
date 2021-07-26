@@ -6,7 +6,4 @@ truncation_length = 8
 symbol = ""
 
 [git_status]
-ahead = "↑"
-behind = "↓"
-deleted = "✗"
-diverged = "↕"
+format = '([\[$modified\]]($style) )'
