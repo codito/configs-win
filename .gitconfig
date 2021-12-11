@@ -39,8 +39,6 @@
     autocrlf = false
     excludesfile = ~/.gitignore_global
 [credential]
-    helper = manager
-[credential "helperselector"]
-    selected = manager-core
+    helper = manager-core
 [include]
     path = .gitconfig_local
