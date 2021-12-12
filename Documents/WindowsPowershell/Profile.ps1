@@ -1,9 +1,6 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 23/07/2021, 22:45:01 +0530
-
-$env:TERM = 'cygwin'
-$env:LESS = 'FRSX'
+## Last Modified: 12/12/2021, 19:44:19 +0530
 
 ## Prompt
 if ($(where.exe starship) -ne $null) {
