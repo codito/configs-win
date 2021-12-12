@@ -1,6 +1,6 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 12/12/2021, 22:06:45 +0530
+## Last Modified: 12/12/2021, 23:34:11 +0530
 
 $env:TERM="xterm-256color"
 
@@ -35,6 +35,11 @@ $env:PATH += ";"+$env:SCRIPTDIR+";."
 $env:PYTHONHOME = Resolve-Path("~\scoop\apps\python\current")
 
 ## User applications
+# Scoop search
+if ($null -ne $(where.exe scoop-search)) {
+    Invoke-Expression (&scoop-search --hook)
+}
+
 # Get my global helper functions
 function global:loadp { . $Profile.CurrentUserAllHosts }
 function global:editp { & $env:EDITOR $Profile.CurrentUserAllHosts }
