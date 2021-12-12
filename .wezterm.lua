@@ -1,6 +1,6 @@
 -- Wezterm configuration
 -- Created: 11/12/2021, 21:09:35 +0530
--- Last updated: 11/12/2021, 23:53:48 +0530
+-- Last updated: 12/12/2021, 21:52:33 +0530
 local wezterm = require("wezterm")
 
 local config = {
@@ -14,7 +14,7 @@ local config = {
         brightness = 1.0,
     },
 
-    font = wezterm.font("Cascadia Code"),
+    font = wezterm.font("Cascadia Code PL"),
     font_size = 12.0,
 
     default_prog = { 'powershell.exe', '-NoLogo' },
@@ -170,4 +170,3 @@ else
 end
 
 return config
-
