@@ -1,6 +1,8 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 12/12/2021, 19:44:19 +0530
+## Last Modified: 12/12/2021, 22:06:45 +0530
+
+$env:TERM="xterm-256color"
 
 ## Prompt
 if ($(where.exe starship) -ne $null) {
