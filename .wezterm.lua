@@ -1,6 +1,6 @@
 -- Wezterm configuration
 -- Created: 11/12/2021, 21:09:35 +0530
--- Last updated: 12/12/2021, 21:52:33 +0530
+-- Last updated: 12/12/2021, 22:20:28 +0530
 local wezterm = require("wezterm")
 
 local config = {
@@ -17,7 +17,7 @@ local config = {
     font = wezterm.font("Cascadia Code PL"),
     font_size = 12.0,
 
-    default_prog = { 'powershell.exe', '-NoLogo' },
+    default_prog = { 'pwsh.exe', '-NoLogo' },
     launch_menu = {},
     leader = { key="b", mods="CTRL" },
 
@@ -154,17 +154,8 @@ local config = {
 
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
     config.term = "" -- Set to empty so FZF works on windows
-    table.insert(config.launch_menu, { label = "PowerShell", args = {"powershell.exe", "-NoLogo"} })
-
-    -- Find installed visual studio version(s) and add their compilation
-    -- environment command prompts to the menu
-    for _, vsvers in ipairs(wezterm.glob("Microsoft Visual Studio/20*", "C:/Program Files (x86)")) do
-        local year = vsvers:gsub("Microsoft Visual Studio/", "")
-        table.insert(config.launch_menu, {
-            label = "x64 Native Tools VS " .. year,
-            args = {"cmd.exe", "/k", "C:/Program Files (x86)/" .. vsvers .. "/BuildTools/VC/Auxiliary/Build/vcvars64.bat"},
-        })
-    end
+    table.insert(config.launch_menu, { label = "PowerShell", args = {"pwsh.exe", "-NoLogo"} })
+    table.insert(config.launch_menu, { label = "PowerShell 5", args = {"powershell.exe", "-NoLogo"} })
 else
     table.insert(config.launch_menu, { label = "zsh", args = {"zsh", "-l"} })
 end
