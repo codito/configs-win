@@ -1,6 +1,6 @@
 -- Wezterm configuration
 -- Created: 11/12/2021, 21:09:35 +0530
--- Last updated: 12/12/2021, 22:20:28 +0530
+-- Last updated: 13/12/2021, 23:28:06 +0530
 local wezterm = require("wezterm")
 
 local config = {
@@ -14,7 +14,7 @@ local config = {
         brightness = 1.0,
     },
 
-    font = wezterm.font("Cascadia Code PL"),
+    font = wezterm.font("Delugia"),
     font_size = 12.0,
 
     default_prog = { 'pwsh.exe', '-NoLogo' },
