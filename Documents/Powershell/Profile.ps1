@@ -1,11 +1,13 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 12/12/2021, 23:34:11 +0530
+## Last Modified: 21/12/2021, 08:04:52 +0530
 
 $env:TERM="xterm-256color"
+$env:XDG_CONFIG_HOME=Resolve-Path("~/.config").ToString()
+$env:XDG_DATA_HOME=Resolve-Path("~/.local/share").ToString()
 
 ## Prompt
-if ($(where.exe starship) -ne $null) {
+if (Get-Command -Name starship -ErrorAction SilentlyContinue) {
     Invoke-Expression (&starship init powershell)
 }
 
@@ -36,7 +38,7 @@ $env:PYTHONHOME = Resolve-Path("~\scoop\apps\python\current")
 
 ## User applications
 # Scoop search
-if ($null -ne $(where.exe scoop-search)) {
+if (Get-Command -Name scoop-search -ErrorAction SilentlyContinue) {
     Invoke-Expression (&scoop-search --hook)
 }
 
