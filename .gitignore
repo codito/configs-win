@@ -20,6 +20,9 @@ Tracing/
 Videos/
 .virtualenvs/
 !Documents/WindowsPowershell
+!Documents/Powershell
+Documents/WindowsPowershell/Modules
+Documents/Powershell/Modules
 
 # others
 Application Data/
@@ -32,6 +35,9 @@ Recent/
 SendTo/
 Start Menu/
 Templates/
+
+# local data
+.local
 
 # files
 _*vim*

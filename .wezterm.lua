@@ -1,6 +1,6 @@
 -- Wezterm configuration
 -- Created: 11/12/2021, 21:09:35 +0530
--- Last updated: 13/12/2021, 23:28:06 +0530
+-- Last updated: 23/12/2021, 08:31:52 +0530
 local wezterm = require("wezterm")
 
 local config = {
@@ -17,7 +17,7 @@ local config = {
     font = wezterm.font("Delugia"),
     font_size = 12.0,
 
-    default_prog = { 'pwsh.exe', '-NoLogo' },
+    default_prog = { 'powershell.exe', '-NoLogo' },
     launch_menu = {},
     leader = { key="b", mods="CTRL" },
 
@@ -154,8 +154,8 @@ local config = {
 
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
     config.term = "" -- Set to empty so FZF works on windows
-    table.insert(config.launch_menu, { label = "PowerShell", args = {"pwsh.exe", "-NoLogo"} })
     table.insert(config.launch_menu, { label = "PowerShell 5", args = {"powershell.exe", "-NoLogo"} })
+    table.insert(config.launch_menu, { label = "PowerShell", args = {"pwsh.exe", "-NoLogo"} })
 else
     table.insert(config.launch_menu, { label = "zsh", args = {"zsh", "-l"} })
 end
