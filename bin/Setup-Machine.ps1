@@ -33,6 +33,9 @@ cmd /c mklink %userprofile%\_gvimrc %userprofile%\vimfiles\gvimrc
 mkdir ~/vimfiles/sessions
 mkdir ~/vimfiles/tmp
 
+# Setup config and data directories
+mkdir ~/.local/share
+
 # Setup git status cache
 #
 . $Profile.CurrentUserAllHosts

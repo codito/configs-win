@@ -38,6 +38,7 @@
 [core]
     autocrlf = false
     excludesfile = ~/.gitignore_global
+    filemode = false
 [credential]
     helper = manager-core
 [include]

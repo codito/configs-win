@@ -1,6 +1,6 @@
 -- Wezterm configuration
 -- Created: 11/12/2021, 21:09:35 +0530
--- Last updated: 23/12/2021, 08:31:52 +0530
+-- Last updated: 15/01/2022, 15:03:01 +0530
 local wezterm = require("wezterm")
 
 local config = {
@@ -159,5 +159,20 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 else
     table.insert(config.launch_menu, { label = "zsh", args = {"zsh", "-l"} })
 end
+
+-- Equivalent to POSIX basename(3)
+-- Given "/foo/bar" returns "bar"
+-- Given "c:\\foo\\bar" returns "bar"
+function basename(s)
+  return string.gsub(s, "(.*[/\\])(.*)", "%2")
+end
+
+wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+  local pane = tab.active_pane
+  local title = basename(pane.foreground_process_name)
+  return {
+    {Text=" " .. title .. " "},
+  }
+end)
 
 return config
