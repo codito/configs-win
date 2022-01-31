@@ -1,6 +1,6 @@
 -- Wezterm configuration
 -- Created: 11/12/2021, 21:09:35 +0530
--- Last updated: 15/01/2022, 15:03:01 +0530
+-- Last updated: 31/01/2022, 21:29:38 +0530
 local wezterm = require("wezterm")
 
 local config = {
@@ -155,7 +155,12 @@ local config = {
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
     config.term = "" -- Set to empty so FZF works on windows
     table.insert(config.launch_menu, { label = "PowerShell 5", args = {"powershell.exe", "-NoLogo"} })
-    table.insert(config.launch_menu, { label = "PowerShell", args = {"pwsh.exe", "-NoLogo"} })
+    --table.insert(config.launch_menu, { label = "PowerShell", args = {"pwsh.exe", "-NoLogo"} })
+    table.insert(config.launch_menu, { label = "VS PowerShell 2022", args = {"powershell.exe", "-NoLogo", "-NoExit", "-Command", "devps 17.0"} })
+    table.insert(config.launch_menu, { label = "VS PowerShell 2019", args = {"powershell.exe", "-NoLogo", "-NoExit", "-Command", "devps 16.0"} })
+    table.insert(config.launch_menu, { label = "Command Prompt", args = {"cmd.exe"} })
+    table.insert(config.launch_menu, { label = "VS Command Prompt 2022", args = {"powershell.exe", "-NoLogo", "-NoExit", "-Command", "devcmd 17.0"} })
+    table.insert(config.launch_menu, { label = "VS Command Prompt 2019", args = {"powershell.exe", "-NoLogo", "-NoExit", "-Command", "devcmd 16.0"} })
 else
     table.insert(config.launch_menu, { label = "zsh", args = {"zsh", "-l"} })
 end

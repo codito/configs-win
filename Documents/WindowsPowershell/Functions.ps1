@@ -1,19 +1,9 @@
 # Functions for PS
-# Last Modified: 23/07/2021, 22:54:33 +0530
+# Last Modified: 31/01/2022, 21:29:16 +0530
 
 # Search utilities
 function global:rgrep { ls -recurse -include $args[1] | grep $args[0] }
 function global:rfind { ls -recurse -include $args[0] | % { $_.FullName } }
-
-# System utilities
-function global:disable-capslock
-{
-    & reg add "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout" /v "Scancode Map" /t REG_BINARY /d "00,00,00,00,00,00,00,00,02,00,00,00,00,00,3a,00,00,00,00,00" /f
-}
-function global:enable-capslock
-{
-    & reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout" /v "Scancode Map" /f
-}
 
 # File system utilities
 function global:.. { cd.. }
@@ -69,88 +59,24 @@ function global:glg { git log --stat --max-count=5 $args }
 function global:glgg { git log --graph --max-count=5 $args }
 function global:gst { git status $args }
 
-# Resharper
-function global:resume-resharper()
+# Visual Studio
+
+function global:devps($version)
 {
-    & reg add HKCU\Software\JetBrains\ReSharper\v7.1\vs11.0 /v IsSuspended /t REG_SZ /d False /f
+    $installPath = &"${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -version "$version" -prerelease -property installationpath
+    Import-Module (Join-Path $installPath "Common7\Tools\Microsoft.VisualStudio.DevShell.dll")
+    Enter-VsDevShell -VsInstallPath $installPath -SkipAutomaticLocation
+    [System.Console]::Title = "Visual Studio " + $version + " Windows Powershell"
 }
 
-function global:suspend-resharper()
+function global:devcmd($version)
 {
-    & reg add HKCU\Software\JetBrains\ReSharper\v7.1\vs11.0 /v IsSuspended /t REG_SZ /d True /f
+    $installPath = &"${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -version "$version" -prerelease -property installationpath
+    cmd.exe /k `"$installPath\Common7\Tools\VsDevCmd.bat`"
 }
 
-# Virtual environment for Python
-function global:mkv
-{
-    param
-    (
-        [Parameter(Mandatory=$true)]
-        [String] $Path,
-
-        [Switch] $SystemSitePackages
-    )
-
-    $venvArgs = @("$env:USERPROFILE\bin\pyvenvex.py", "--symlinks", "--verbose")
-    if ($SystemSitePackages) { $venvArgs += "--system-site-packages" }
-    $venvArgs += $path
-    & python $venvArgs
-    Write-Host "Completed command: $venvArgs"
-}
-
-function global:cdv
-{
-    param
-    (
-        [Parameter(Mandatory=$true)]
-        [String] $Path
-    )
-
-    if (-not (Test-Path $Path)) { Write-Host "Virtual environment path not found: $Path."; return }
-    & $Path\Scripts\Activate.ps1
-    Write-Host "Activated virtual environment from $path."
-}
-
-# Diffs multiple files in a directory selected by a pattern
-# Incomplete
-function global:mdiff($dir, $pattern)
-{
-    $fileContentHash = @{}
-    $maxLines = 0
-
-    # read all the files
-    ls $dir -recurse -include $pattern |
-    % {
-        $fileName = $_
-        $fContent = (cat $FileName)
-
-        # create line wise hash which will contain the file and the line numbers
-        # @{ Line1 = { file:line1; file2:line1; file3:line1 .. } }
-        $lineCount = 1
-        $fContent |
-        % {
-            $fileAndLine = $fileName+":"+$_
-            $currentValue += ,$fileAndLine
-            if ($fileContentHash.ContainsKey($lineCount))
-            {
-                # the key exists, so add the file:line to the value
-                $currentValue = $fileContentHash.Item($lineCount)
-                $currentValue += ,$fileAndLine
-                $fileContentHash.Item($lineCount) = $currentValue
-            }
-            else
-            {
-                # add a key/value for this line number
-                $fileContentHash.Add($lineCount, $currentValue)
-            }
-
-            $currentValue = $null
-            $lineCount++
-        }
-
-        write-host "Parsed: $fileName"
-    }
-
-    # traverse through the hash and list the differences
-    $fileContentHash
-}
+function global:b { msbuild $args }
+function global:bm { msbuild /v:minimal $args }
+function global:br { msbuild /v:minimal /t:rebuild $args }
+function global:bre { msbuild /v:minimal /t:restore $args }
+function global:bc { msbuild /v:minimal /t:clean $args }
