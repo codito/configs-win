@@ -1,5 +1,5 @@
 # Functions for PS
-# Last Modified: 31/01/2022, 21:29:16 +0530
+# Last Modified: 01/02/2022, 19:26:03 +0530
 
 # Search utilities
 function global:rgrep { ls -recurse -include $args[1] | grep $args[0] }
@@ -63,7 +63,8 @@ function global:gst { git status $args }
 
 function global:devps($version)
 {
-    $installPath = &"${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -version "$version" -prerelease -property installationpath
+    $versionRange = "[$version,$([System.Double]$version+1))"
+    $installPath = &"${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -version "$versionRange" -prerelease -property installationpath
     Import-Module (Join-Path $installPath "Common7\Tools\Microsoft.VisualStudio.DevShell.dll")
     Enter-VsDevShell -VsInstallPath $installPath -SkipAutomaticLocation
     [System.Console]::Title = "Visual Studio " + $version + " Windows Powershell"
@@ -71,7 +72,8 @@ function global:devps($version)
 
 function global:devcmd($version)
 {
-    $installPath = &"${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -version "$version" -prerelease -property installationpath
+    $versionRange = "[$version,$([System.Double]$version+1))"
+    $installPath = &"${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -version "$versionRange" -prerelease -property installationpath
     cmd.exe /k `"$installPath\Common7\Tools\VsDevCmd.bat`"
 }
 
