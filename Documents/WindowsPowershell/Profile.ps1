@@ -1,6 +1,6 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 21/12/2021, 08:04:52 +0530
+## Last Modified: 20/02/2022, 00:06:19 +0530
 
 $env:TERM="xterm-256color"
 $env:XDG_CONFIG_HOME=Resolve-Path("~/.config").ToString()
@@ -29,8 +29,9 @@ set-alias wc measure-object
 ## Globals
 # Environment variables
 $env:SCRIPTDIR = Resolve-Path("~\bin").ToString()
-$env:EDITOR = "gvim.exe"
+$env:EDITOR = "nvim.exe"
 $env:FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+$env:FZF_PREVIEW_COMMAND='bat --color always --style gruvbox-dark'
 
 # Script Directory
 $env:PATH += ";"+$env:SCRIPTDIR+";."
