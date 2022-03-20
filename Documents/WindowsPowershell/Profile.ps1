@@ -1,6 +1,6 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 26/02/2022, 22:35:21 +0530
+## Last Modified: 20/03/2022, 23:07:27 +0530
 
 $env:TERM="xterm-256color"
 $env:XDG_CONFIG_HOME=Resolve-Path("~/.config").ToString()
@@ -37,6 +37,12 @@ $env:PATH += ";"+$env:SCRIPTDIR+";."
 $env:PYTHONHOME = Resolve-Path("~\scoop\apps\python\current")
 
 ## User applications
+# Scoop completion
+$private:scoopCompleteModule = "$($(Get-Item $(Get-Command scoop.ps1).Path).Directory.Parent.FullName)\modules\scoop-completion"
+if (Test-Path $private:scoopCompleteModule) {
+    Import-Module $private:scoopCompleteModule
+}
+
 # Scoop search
 if (Get-Command -Name scoop-search -ErrorAction SilentlyContinue) {
     Invoke-Expression (&scoop-search --hook)
