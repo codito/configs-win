@@ -2,19 +2,9 @@
 #
 scoop install git
 scoop bucket add extras
+scoop bucket add versions
 scoop bucket add dodorz https://github.com/dodorz/scoop.git
 scoop bucket add nerd-fonts https://github.com/matthewjberger/scoop-nerd-fonts
-
-scoop install sudo
-scoop install 7zip
-scoop install ag
-scoop install autojump-rs
-scoop install conemu
-sudo scoop install jetbrains-mono jetbrainsmono-nf
-scoop install python
-scoop install starship
-scoop install sysinternals
-scoop install vim-tux
 
 # Fetch windows configuration
 #
@@ -25,6 +15,12 @@ git fetch origin
 git checkout -t origin/master
 git submodule init
 git submodule update
+
+# Install apps
+#
+cat ~\.config\scoop\apps.txt | % {
+    scoop install $_
+}
 
 # Setup vim
 #
