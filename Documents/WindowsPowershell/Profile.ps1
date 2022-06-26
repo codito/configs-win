@@ -1,6 +1,6 @@
 ## Portable Profile
 ## Created: Sat 15 Jan 2011 02:15:57 PM India Standard Time
-## Last Modified: 20/03/2022, 23:07:27 +0530
+## Last Modified: 15/04/2022, 09:39:11 +0530
 
 $env:TERM="xterm-256color"
 $env:XDG_CONFIG_HOME=Resolve-Path("~/.config").ToString()
@@ -34,7 +34,8 @@ $env:FZF_DEFAULT_COMMAND="fd --type f"
 
 # Script Directory
 $env:PATH += ";"+$env:SCRIPTDIR+";."
-$env:PYTHONHOME = Resolve-Path("~\scoop\apps\python\current")
+$scoop = if (-not [string]::IsNullOrEmpty("$env:scoop")) { $env:scoop } else { "~\scoop" }
+$env:PYTHONHOME = Resolve-Path("$scoop\apps\python\current")
 
 ## User applications
 # Scoop completion
