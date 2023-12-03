@@ -46,3 +46,5 @@ local.vim
 NTUSER*
 .scoop
 .gitconfig_local
+.ssh/
+src/
