@@ -1,11 +1,11 @@
 -- Wezterm configuration
 -- Created: 11/12/2021, 21:09:35 +0530
--- Last updated: 31/01/2022, 21:29:38 +0530
+-- Last updated: 01/05/2024, 07:35:18 +0530
 local wezterm = require("wezterm")
 
 local config = {
     check_for_updates = false,
-    color_scheme = "Gruvbox Dark",
+    color_scheme = "Gruvbox dark, hard (base16)",
 
     tab_bar_at_bottom = true,
     inactive_pane_hsb = {
@@ -14,10 +14,10 @@ local config = {
         brightness = 1.0,
     },
 
-    font = wezterm.font("Delugia"),
+    font = wezterm.font("IosevkaTerm NFM"),
     font_size = 12.0,
 
-    default_prog = { 'powershell.exe', '-NoLogo' },
+    default_prog = { 'pwsh.exe', '-NoLogo' },
     launch_menu = {},
     leader = { key="b", mods="CTRL" },
 
@@ -30,10 +30,10 @@ local config = {
         { key = "Q", mods = "LEADER",       action=wezterm.action{CloseCurrentTab={confirm=true}}},
         { key = "x", mods = "LEADER",       action=wezterm.action{CloseCurrentPane={confirm=false}}},
         { key = "X", mods = "LEADER",       action=wezterm.action{CloseCurrentTab={confirm=false}}},
-        --SUPER	m	Hide
-        --SUPER	n	SpawnWindow
-        --CTRL+SHIFT	n	SpawnWindow
-        --ALT	Enter	ToggleFullScreen
+        --SUPER m       Hide
+        --SUPER n       SpawnWindow
+        --CTRL+SHIFT    n       SpawnWindow
+        --ALT   Enter   ToggleFullScreen
 
         -- Pane navigation
         { key = "h", mods = "LEADER",       action=wezterm.action{ActivatePaneDirection="Left"}},
@@ -76,38 +76,38 @@ local config = {
         { key = "|",mods = "LEADER|SHIFT",  action=wezterm.action{SplitHorizontal={domain="CurrentPaneDomain"}}},
 
         -- Scroll/search buffer
-        --SHIFT	PageUp	ScrollByPage=-1
-        --SHIFT	PageDown	ScrollByPage=1
-        --SUPER	k	ClearScrollback="ScrollbackOnly"
-        --CTRL+SHIFT	K	ClearScrollback="ScrollbackOnly"
-        --SUPER	f	Search={CaseSensitiveString=""}
-        --CTRL+SHIFT	F	Search={CaseSensitiveString=""}
+        --SHIFT PageUp  ScrollByPage=-1
+        --SHIFT PageDown        ScrollByPage=1
+        --SUPER k       ClearScrollback="ScrollbackOnly"
+        --CTRL+SHIFT    K       ClearScrollback="ScrollbackOnly"
+        --SUPER f       Search={CaseSensitiveString=""}
+        --CTRL+SHIFT    F       Search={CaseSensitiveString=""}
 
         -- Copy/paste buffer
         { key = "[",mods = "LEADER",  action="ActivateCopyMode"},
         { key = " ",mods = "LEADER",  action="QuickSelect"},
-        --SUPER	c	CopyTo="Clipboard"
-        --SUPER	v	PasteFrom="Clipboard"
-        --CTRL+SHIFT	c	CopyTo="Clipboard"
-        --CTRL+SHIFT	v	PasteFrom="Clipboard"
-        --CTRL	Insert	CopyTo="PrimarySelection" ()
-        --SHIFT	Insert	PasteFrom="PrimarySelection"
-        --CTRL+SHIFT	X	ActivateCopyMode
-        --CTRL+SHIFT	(Space)	QuickSelect (since: 20210502-130208-bff6815d)
+        --SUPER c       CopyTo="Clipboard"
+        --SUPER v       PasteFrom="Clipboard"
+        --CTRL+SHIFT    c       CopyTo="Clipboard"
+        --CTRL+SHIFT    v       PasteFrom="Clipboard"
+        --CTRL  Insert  CopyTo="PrimarySelection" ()
+        --SHIFT Insert  PasteFrom="PrimarySelection"
+        --CTRL+SHIFT    X       ActivateCopyMode
+        --CTRL+SHIFT    (Space) QuickSelect (since: 20210502-130208-bff6815d)
 
         -- Fonts
-        --SUPER	-	DecreaseFontSize
-        --CTRL	-	DecreaseFontSize
-        --SUPER	=	IncreaseFontSize
-        --CTRL	=	IncreaseFontSize
-        --SUPER	0	ResetFontSize
-        --CTRL	0	ResetFontSize
-        --CTRL	Z	TogglePaneZoomState
+        --SUPER -       DecreaseFontSize
+        --CTRL  -       DecreaseFontSize
+        --SUPER =       IncreaseFontSize
+        --CTRL  =       IncreaseFontSize
+        --SUPER 0       ResetFontSize
+        --CTRL  0       ResetFontSize
+        --CTRL  Z       TogglePaneZoomState
 
         -- Misc
-        --SUPER	r	ReloadConfiguration
-        --CTRL+SHIFT	R	ReloadConfiguration
-        --CTRL+SHIFT	L	ShowDebugOverlay (Since: 20210814-124438-54e29167)
+        --SUPER r       ReloadConfiguration
+        --CTRL+SHIFT    R       ReloadConfiguration
+        --CTRL+SHIFT    L       ShowDebugOverlay (Since: 20210814-124438-54e29167)
     },
     set_environment_variables = {},
 
