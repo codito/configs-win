@@ -7,6 +7,7 @@ $env:XDG_CONFIG_HOME=Resolve-Path("~/.config").ToString()
 $env:XDG_DATA_HOME=Resolve-Path("~/.local/share").ToString()
 
 ## Prompt
+$env:STARSHIP_LOG="error"
 if (Get-Command -Name starship -ErrorAction SilentlyContinue) {
     Invoke-Expression (&starship init powershell)
 }
