@@ -1,9 +1,9 @@
-[submodule "vimfiles"]
-	path = vimfiles
-	url = https://github.com/codito/vim-config.git
 [submodule "Documents/WindowsPowershell/Modules/Posh-git"]
 	path = Documents/WindowsPowershell/Modules/Posh-git
 	url = https://github.com/codito/posh-git.git
 [submodule "Documents/WindowsPowershell/Modules/git-status-cache-posh-client"]
 	path = Documents/WindowsPowershell/Modules/git-status-cache-posh-client
 	url = https://github.com/cmarcusreid/git-status-cache-posh-client.git
+[submodule ".config/nvim"]
+	path = .config/nvim
+	url = https://github.com/codito/vim-config
