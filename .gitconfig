@@ -39,7 +39,8 @@
     autocrlf = false
     excludesfile = ~/.gitignore_global
     filemode = false
+    sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
 [include]
     path = .gitconfig_local
 [credential "helperselector"]
-	selected = manager
+    selected = manager
